@@ -118,7 +118,6 @@ public class Actions {
 					typeRetryCount++;
 					type(by, textToType);
 				}
-
 			}
 			typeRetryCount = 0;
 		} catch (StaleElementReferenceException ex) {
@@ -136,7 +135,6 @@ public class Actions {
 			if (driver.findElement(by) != null) {
 				type(by, textToType);
 			}
-
 		} catch (Exception ex) {
 		}
 	}
@@ -158,27 +156,20 @@ public class Actions {
 
 	public void typeRandomNumber(By by, int countOfDigits) {
 		String randomValue = "";
-
 		Random randomNumber = new Random();
-
 		for (int i = 0; i < countOfDigits; i++) {
 			randomValue = randomValue + randomNumber.nextInt(9);
 		}
-
 		driver.findElement(by).clear();
-
 		driver.findElement(by).sendKeys(randomValue);
 	}
 
 	public void typeRandomNumberWithoutClearing(By by, int countOfDigits) {
 		String randomValue = "";
-
 		Random randomNumber = new Random();
-
 		for (int i = 0; i < countOfDigits; i++) {
 			randomValue = randomValue + randomNumber.nextInt(9);
 		}
-
 		driver.findElement(by).sendKeys(randomValue);
 	}
 
@@ -241,7 +232,6 @@ public class Actions {
 				return (driver.getWindowHandles().size() == numberOfWindows);
 			}
 		});
-
 	}
 
 	public void waitForTextIsNotNull(By by) throws InterruptedException {
@@ -265,13 +255,9 @@ public class Actions {
 	}
 
 	public void waitForPageLoad() {
-		// System.Threading.Thread.Sleep(1000);
 		try {
 			String pageLoadState = (String) ((JavascriptExecutor) driver)
 					.executeScript("return document.readyState");
-
-			// System.out.println("Page load state = " + pageLoadState);
-
 			for (int i = 0; i < 60; i++) {
 				if (pageLoadState.equals("complete")
 						|| pageLoadState.equals("loaded")) {
@@ -283,7 +269,6 @@ public class Actions {
 							.executeScript("return document.readyState");
 
 				}
-
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -307,7 +292,6 @@ public class Actions {
 		for (int i = 0; i < countOfSymbols; i++)
 			name += letters[(int) (Math.random() * (letters.length - 1))];
 		return name;
-
 	}
 
 	public String randomString_Cyrillic(int countOfSymbols) {
@@ -318,7 +302,6 @@ public class Actions {
 		for (int i = 0; i < countOfSymbols; i++)
 			name += letters[(int) (Math.random() * (letters.length - 1))];
 		return name;
-
 	}
 
 	public void selectByValue(By by, String value) {
