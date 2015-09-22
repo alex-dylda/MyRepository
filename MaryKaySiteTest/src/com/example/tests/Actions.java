@@ -21,22 +21,21 @@ public class Actions {
 	public static String url;
 	private static int clickRetryCount = 0;
 	private static int typeRetryCount = 0;
-	
-	protected Actions(WebDriver driver)
-	{
-		Actions.driver = driver; 
+
+	protected Actions(WebDriver driver) {
+		Actions.driver = driver;
 	}
 
-	public void openURL(String url) throws Exception
-	{
+	public void openURL(String url) throws Exception {
 		driver.navigate().to(url);
 		waitForPageLoad();
 		String currURL = driver.getCurrentUrl().toUpperCase();
-		String shortURL = url.substring(url.indexOf("www"), url.length()).toUpperCase();
-		if(!currURL.contains(shortURL))
-			throw new Exception("URL: \""+url+"\" was opened incorrectly");		
+		String shortURL = url.substring(url.indexOf("www"), url.length())
+				.toUpperCase();
+		if (!currURL.contains(shortURL))
+			throw new Exception("URL: \"" + url + "\" was opened incorrectly");
 	}
-	
+
 	public void click(By by) throws InterruptedException {
 		try {
 			driver.findElement(by).click();
@@ -47,16 +46,15 @@ public class Actions {
 				clickRetryCount++;
 				click(by);
 			}
-		}
-		 catch (WebDriverException ex) {
-				while (clickRetryCount < 3) {
-					Thread.sleep(200);
-					clickRetryCount++;
-					click(by);
-				}
+		} catch (WebDriverException ex) {
+			while (clickRetryCount < 3) {
+				Thread.sleep(200);
+				clickRetryCount++;
+				click(by);
+			}
 		}
 	}
-	
+
 	public void clickIfPresent(By by) throws InterruptedException {
 		try {
 			driver.findElement(by).click();
@@ -67,8 +65,7 @@ public class Actions {
 				clickRetryCount++;
 				clickIfPresent(by);
 			}
-		}
-		catch (WebDriverException ex) {
+		} catch (WebDriverException ex) {
 			while (clickRetryCount < 3) {
 				Thread.sleep(200);
 				clickRetryCount++;
@@ -76,54 +73,53 @@ public class Actions {
 			}
 		}
 	}
-	
-	public void clearinputField(By by) throws InterruptedException
-	{
+
+	public void clearinputField(By by) throws InterruptedException {
 		driver.findElement(by).clear();
 		Thread.sleep(500);
 	}
 
-	public void closeBrowser()
-	{
+	public void closeBrowser() {
 		driver.quit();
 	}
-	
+
 	public void type(By by, String textToType) throws InterruptedException {
 		try {
 
-					String textInField = "";
-					if(driver.findElement(by).getTagName().equals("input"))
-						textInField =  driver.findElement(by).getAttribute("value").toString().toUpperCase();
-					else
-						textInField = driver.findElement(by).getText().toString().toUpperCase();
-				
-					if(!textInField.isEmpty()
-							|| driver.findElement(by).getAttribute("type").equals("password"))
-					{
-						driver.findElement(by).clear();
-						Thread.sleep(50);
-						driver.findElement(by).sendKeys(textToType);
-					}
-					else
-					{
-							driver.findElement(by).clear();
-							Thread.sleep(50);
-							driver.findElement(by).sendKeys(textToType);
-							String typedText = "";
-							
-								if(driver.findElement(by).getTagName().equals("input"))
-									typedText =  driver.findElement(by).getAttribute("value").toString().toUpperCase();
-								else
-									typedText = driver.findElement(by).getText().toString().toUpperCase();
-							
-								if(!typedText.equals(textToType.toUpperCase())
-										&& typeRetryCount<3)
-								{
-									typeRetryCount++;
-									type(by,textToType);
-								}
-						
-					}
+			String textInField = "";
+			if (driver.findElement(by).getTagName().equals("input"))
+				textInField = driver.findElement(by).getAttribute("value")
+						.toString().toUpperCase();
+			else
+				textInField = driver.findElement(by).getText().toString()
+						.toUpperCase();
+
+			if (!textInField.isEmpty()
+					|| driver.findElement(by).getAttribute("type")
+							.equals("password")) {
+				driver.findElement(by).clear();
+				Thread.sleep(50);
+				driver.findElement(by).sendKeys(textToType);
+			} else {
+				driver.findElement(by).clear();
+				Thread.sleep(50);
+				driver.findElement(by).sendKeys(textToType);
+				String typedText = "";
+
+				if (driver.findElement(by).getTagName().equals("input"))
+					typedText = driver.findElement(by).getAttribute("value")
+							.toString().toUpperCase();
+				else
+					typedText = driver.findElement(by).getText().toString()
+							.toUpperCase();
+
+				if (!typedText.equals(textToType.toUpperCase())
+						&& typeRetryCount < 3) {
+					typeRetryCount++;
+					type(by, textToType);
+				}
+
+			}
 			typeRetryCount = 0;
 		} catch (StaleElementReferenceException ex) {
 			while (typeRetryCount < 30) {
@@ -133,15 +129,16 @@ public class Actions {
 			}
 		}
 	}
-	
-	public void typeIfPresent(By by, String textToType) throws InterruptedException {
-		try{
-			if(driver.findElement(by)!=null)
-			{
+
+	public void typeIfPresent(By by, String textToType)
+			throws InterruptedException {
+		try {
+			if (driver.findElement(by) != null) {
 				type(by, textToType);
 			}
-			
-		}catch(Exception ex){}
+
+		} catch (Exception ex) {
+		}
 	}
 
 	public void typeWithoutClearing(By by, String text)
@@ -184,7 +181,7 @@ public class Actions {
 
 		driver.findElement(by).sendKeys(randomValue);
 	}
-	
+
 	public void waitForElementEnabled(By by) throws InterruptedException {
 		for (int i = 0; i < 10; i++) {
 			try {
@@ -198,8 +195,9 @@ public class Actions {
 			}
 		}
 	}
-	
-	public void waitForElementPresent(By by, int TimeInSeconds) throws InterruptedException {
+
+	public void waitForElementPresent(By by, int TimeInSeconds)
+			throws InterruptedException {
 		for (int i = 0; i < TimeInSeconds; i++) {
 			try {
 				driver.findElement(by);
@@ -210,7 +208,8 @@ public class Actions {
 		}
 	}
 
-	public void waitForNotVisible(By by, int TimeInSeconds) throws InterruptedException {
+	public void waitForNotVisible(By by, int TimeInSeconds)
+			throws InterruptedException {
 		for (int i = 0; i < TimeInSeconds; i++) {
 			try {
 				if (driver.findElement(by).isDisplayed()) {
@@ -222,7 +221,8 @@ public class Actions {
 		}
 	}
 
-	public void waitForVisible(By by,int TimeInSeconds) throws InterruptedException {
+	public void waitForVisible(By by, int TimeInSeconds)
+			throws InterruptedException {
 		for (int i = 0; i < TimeInSeconds; i++) {
 			try {
 				if (!driver.findElement(by).isDisplayed()) {
@@ -233,17 +233,17 @@ public class Actions {
 			}
 		}
 	}
-	
+
 	public void waitForNumberOfWindowsToEqual(final int numberOfWindows) {
 		WebDriverWait wait = new WebDriverWait(driver, 30, 50);
 		wait.until(new ExpectedCondition<Boolean>() {
 			public Boolean apply(WebDriver d) {
-				return (driver.getWindowHandles().size()==numberOfWindows);
+				return (driver.getWindowHandles().size() == numberOfWindows);
 			}
 		});
 
 	}
-	
+
 	public void waitForTextIsNotNull(By by) throws InterruptedException {
 		String textOfElement = "";
 		for (int i = 0; i < 30; i++) {
@@ -263,7 +263,7 @@ public class Actions {
 			}
 		}
 	}
-	
+
 	public void waitForPageLoad() {
 		// System.Threading.Thread.Sleep(1000);
 		try {
@@ -331,12 +331,12 @@ public class Actions {
 		select.selectByIndex(index);
 	}
 
-	public void selectByVisibleText(By by, String text) throws InterruptedException {
-		try{
+	public void selectByVisibleText(By by, String text)
+			throws InterruptedException {
+		try {
 			Select select = new Select(driver.findElement(by));
 			select.selectByVisibleText(text);
-		}catch(StaleElementReferenceException ex)
-		{
+		} catch (StaleElementReferenceException ex) {
 			Thread.sleep(1000);
 			Select select = new Select(driver.findElement(by));
 			select.selectByVisibleText(text);
@@ -377,11 +377,11 @@ public class Actions {
 		return (String) ((JavascriptExecutor) driver).executeScript(script,
 				element);
 	}
-	
+
 	public String getTextOfElement(By by) {
 		String textOfElement = "";
 		WebElement elem = driver.findElement(by);
-		if(elem.getTagName().toString().equals("input"))
+		if (elem.getTagName().toString().equals("input"))
 			textOfElement = elem.getAttribute("value").toString();
 		else
 			textOfElement = elem.getText();
@@ -389,12 +389,12 @@ public class Actions {
 	}
 
 	public boolean verifyElementIsDisplayed(By by) throws InterruptedException {
-		try{
-					if (driver.findElement(by).isDisplayed()) 
-						return true;
-					else
-						return false;
-		}catch (Exception ex){
+		try {
+			if (driver.findElement(by).isDisplayed())
+				return true;
+			else
+				return false;
+		} catch (Exception ex) {
 			return false;
 		}
 	}
